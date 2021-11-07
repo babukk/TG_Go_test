@@ -1,0 +1,28 @@
+version: '3.7'
+
+services:
+    script:
+        build:
+            context: ./script/
+        command: /script/src/script.py
+        container_name: script-mtg
+        environment:
+            DATABASE_HOST: "dbpg-mtg"
+            DATABASE_PORT: "5432"
+            DATABASE_NAME: "users"
+            DATABASE_USER: "postgres"
+            DATABASE_PASS: "postgres"
+        depends_on:
+            - db
+
+    db:
+        image: "postgres:latest"
+        container_name: dbpg-mtg
+        environment:
+            POSTGRES_USER: postgres
+            POSTGRES_PASSWORD: postgres
+            PGDATA: /var/lib/postgresql/data/
+        volumes:
+            - ./.database/postgres/data:/var/lib/postgresql/data
+        ports:
+            - "35432:5432"
